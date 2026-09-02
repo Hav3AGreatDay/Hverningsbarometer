@@ -76,7 +76,7 @@ Hvis du hellere vil rette i et regneark end i GitHub:
 var SHEET_CSV_URL = "";      // ← her
 ```
 
-Siden henter så nye tal automatisk hvert 5. minut, og der er en **Hent nye tal**-knap.
+Siden henter så nye tal automatisk hvert 5. minut.
 
 ---
 
