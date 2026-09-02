@@ -401,11 +401,15 @@ function hent(){
   return fetch(url, {cache:"no-store"})
     .then(function(r){
       if(!r.ok) throw new Error("Serveren svarede " + r.status);
-      return r.text();
+      var lastModified = r.headers.get("last-modified");
+      var csvOpdateretKl = lastModified ? new Date(lastModified) : null;
+      return r.text().then(function(txt){
+        return { txt: txt, csvOpdateretKl: csvOpdateretKl };
+      });
     })
-    .then(function(txt){
-      afdelinger = rowsTilData(parseCSV(txt));
-      hentetKl = new Date();
+    .then(function(res){
+      afdelinger = rowsTilData(parseCSV(res.txt));
+      hentetKl = (res.csvOpdateretKl && !isNaN(res.csvOpdateretKl.getTime())) ? res.csvOpdateretKl : new Date();
       fejl = "";
     })
     .catch(function(e){
