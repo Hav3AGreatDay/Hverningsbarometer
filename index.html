@@ -183,7 +183,6 @@ footer{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);color:v
 <body>
 <div class="wrap">
   <section class="hero">
-    <div class="controls"><button id="refresh" type="button">Hent nye tal</button></div>
     <div class="hero-top">
       <svg class="logo" viewBox="0 0 567 567" role="img" aria-label="SF Ungdom">
         <path class="plate" d="M62 0h505v505a62 62 0 0 1-62 62H62A62 62 0 0 1 0 505V62A62 62 0 0 1 62 0Z"/>
@@ -392,10 +391,12 @@ function renderGrid(){
 function renderAll(){ renderMeta(); renderNotice(); renderLadder(); renderGrid(); }
 
 function hent(){
-  var btn = document.getElementById("refresh");
   var url = DATA_URL + (DATA_URL.indexOf("?") >= 0 ? "&" : "?") + "_=" + Date.now();
-  btn.disabled = true;
-  btn.textContent = "Henter …";
+  var btn = document.getElementById("refresh");
+  if(btn){
+    btn.disabled = true;
+    btn.textContent = "Henter …";
+  }
 
   return fetch(url, {cache:"no-store"})
     .then(function(r){
@@ -412,13 +413,14 @@ function hent(){
              (hentetKl ? "Viser det, der sidst blev hentet." : "Viser reservetallene fra index.html.");
     })
     .then(function(){
-      btn.disabled = false;
-      btn.textContent = "Hent nye tal";
+      if(btn){
+        btn.disabled = false;
+        btn.textContent = "Hent nye tal";
+      }
       renderAll();
     });
 }
 
-document.getElementById("refresh").addEventListener("click", hent);
 renderAll();
 hent();
 if(OPDATER_HVERT_MINUT > 0){ setInterval(hent, OPDATER_HVERT_MINUT * 60000); }
