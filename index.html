@@ -318,9 +318,9 @@ function renderLadder(){
     '<p>Trinene tælles i procent af <em>jeres eget</em> mål, ikke i antal medlemmer. ' +
     '100 % betyder, at I ramte præcis det tal, I selv meldte ind — og der er stadig fire trin at gå derefter.</p></div>' +
     '<ul class="steps">' + LADDER.map(function(t){
-      var band = t.pct >= 150 ? "top" : (t.pct === 100 ? "goal" : "");
-      var c1 = t.pct >= 150 ? "var(--red)" : "var(--red-tint)";
-      var c2 = t.pct >= 150 ? "var(--gold)" : "var(--red)";
+      var band = t.pct > 100 ? "top" : (t.pct === 100 ? "goal" : "");
+      var c1 = t.pct > 100 ? "var(--red)" : "var(--red-tint)";
+      var c2 = t.pct > 100 ? "var(--gold)" : "var(--red)";
       var tag = t.pct === 100 ? '<span class="tag">Målet nået</span>'
               : (t.pct === MAXPCT ? '<span class="tag gold">Årets største</span>' : "");
       return '<li class="step ' + band + '" style="--c1:' + c1 + ';--c2:' + c2 + '">' +
@@ -350,7 +350,7 @@ function renderGrid(){
     }).join("");
 
     var wonLine = won
-      ? '<p class="won-line"><span class="mini ' + (won.pct >= 150 ? "gold" : "red") + '">' + won.pct + '&thinsp;%</span>' +
+      ? '<p class="won-line"><span class="mini ' + (won.pct > 100 ? "gold" : "red") + '">' + won.pct + '&thinsp;%</span>' +
         '<span class="txt">Låst op: ' + esc(won.navn) + '</span></p>'
       : '<p class="won-line"><span class="mini grey">0&thinsp;%</span>' +
         '<span class="txt" style="font-weight:600;color:var(--ink-soft)">Ingen præmie låst op endnu</span></p>';
