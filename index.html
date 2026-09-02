@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hvervningsbarometeret · SFU</title>
+<meta name="description" content="Hvor stor en del af sit eget hvervningsmål har din SFU-afdeling nået?">
+<meta name="theme-color" content="#F2E7D5">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&display=swap">
+<style>
+:root{
+  --ground:#F2E7D5; --surface:#FCF7EE; --surface-2:#EDE0CB; --panel:#FFFBF3;
+  --ink:#241C13; --ink-soft:#736450; --line:#E0D1B6;
+  --red:#EE4123; --red-deep:#BF2E13; --red-tint:#F8DACE; --red-wash:#FBEBE2;
+  --gold:#BE8408; --gold-tint:#F3E3B9; --gold-wash:#FAF0D8;
+  --green:#2A7A54; --green-tint:#D9EFDF;
+  --shadow:0 1px 2px rgba(60,45,25,.06), 0 10px 26px -14px rgba(60,45,25,.30);
+  --shadow-lift:0 2px 5px rgba(60,45,25,.08), 0 20px 40px -16px rgba(238,65,35,.32);
+}
+
+html{color-scheme:light only}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:Archivo,"Helvetica Neue",Arial,sans-serif;
+  font-variation-settings:"wdth" 100;
+  font-size:15.5px; line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:26px 22px 80px}
+
+h1,h2,h3{
+  font-family:Archivo,"Helvetica Neue",Arial,sans-serif;
+  font-variation-settings:"wdth" 118; font-weight:800;
+  text-transform:uppercase; letter-spacing:.015em; text-wrap:balance; margin:0;
+}
+.eyebrow{font-size:11.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--red-deep);margin:0}
+
+/* ---------------- hero ---------------- */
+.hero{
+  background:var(--panel); border:1px solid var(--line); border-top:5px solid var(--red);
+  border-radius:16px; padding:28px 32px 32px; margin-bottom:22px;
+  position:relative; box-shadow:var(--shadow);
+}
+.hero-top{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.logo{width:50px;height:50px;flex:0 0 auto;display:block}
+.logo .plate{fill:var(--red)}
+.logo .mark{stroke:#fff}
+.hero h1{font-size:clamp(31px,5.4vw,55px);line-height:.97}
+.hero h1 em{font-style:normal;color:var(--red)}
+.hero p{margin:14px 0 0;max-width:62ch;color:var(--ink-soft);font-size:16px}
+.controls{position:absolute;top:26px;right:28px}
+
+/* ---------------- meta chips ---------------- */
+.meta{display:flex;flex-wrap:wrap;gap:9px;margin:0 0 32px;padding:0;list-style:none}
+.chip{
+  display:inline-flex;align-items:baseline;gap:7px;background:var(--surface);
+  border:1px solid var(--line);border-radius:999px;padding:7px 15px;font-size:13px;color:var(--ink-soft);
+}
+.chip b{font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.chip.hot{background:var(--red-wash);border-color:var(--red-tint);color:var(--red-deep)}
+.chip.hot b{color:var(--red-deep)}
+
+/* ---------------- præmietrappen ---------------- */
+.ladder{margin:0 0 42px}
+.ladder-head h2{font-size:22px}
+.ladder-head p{margin:7px 0 0;color:var(--ink-soft);font-size:14px;max-width:66ch}
+.steps{list-style:none;margin:20px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.step{
+  position:relative;display:flex;align-items:center;gap:15px;
+  padding:12px 18px;border-radius:12px;overflow:hidden;
+  background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);
+}
+.stepbar{
+  position:absolute;left:0;top:0;bottom:0;width:var(--w);
+  background:linear-gradient(90deg,var(--c1),var(--c2));opacity:.20;
+}
+.pctchip{
+  position:relative;flex:0 0 auto;min-width:78px;text-align:center;
+  padding:7px 10px;border-radius:9px;background:var(--c2);color:#fff;
+  font-weight:800;font-size:14.5px;font-variant-numeric:tabular-nums;line-height:1;
+}
+.prize{position:relative;font-size:15px;font-weight:600;line-height:1.35}
+.step.goal{border-color:var(--red);border-width:2px;padding:11px 17px}
+.step.top{border-color:var(--gold);border-width:2px;padding:11px 17px}
+.tag{
+  display:inline-block;margin-left:9px;padding:2px 9px;border-radius:999px;vertical-align:middle;
+  font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  background:var(--green-tint);color:var(--green);
+}
+.tag.gold{background:var(--gold-tint);color:var(--gold)}
+@media (max-width:640px){
+  .step{flex-wrap:wrap;gap:9px}
+  .pctchip{min-width:66px}
+}
+
+/* ---------------- cards ---------------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+.card{
+  background:var(--surface);border:1px solid var(--line);border-radius:14px;
+  padding:19px 20px 20px;box-shadow:var(--shadow);
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+.card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lift)}
+.card.lead{border:2px solid var(--gold);background:linear-gradient(180deg,var(--gold-wash),var(--surface) 92px);padding:18px 19px 19px}
+
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.who{display:flex;align-items:flex-start;gap:11px;min-width:0}
+.rank{
+  flex:0 0 auto;width:28px;height:28px;border-radius:9px;margin-top:3px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--surface-2);color:var(--ink-soft);border:1px solid var(--line);
+  font-weight:800;font-size:12.5px;font-variant-numeric:tabular-nums;
+}
+.rank.first{background:var(--gold);border-color:var(--gold);color:#fff}
+.afd{font-size:21px;line-height:1.1;font-variation-settings:"wdth" 112}
+.counts{font-size:12.5px;color:var(--ink-soft);margin:3px 0 0;font-variant-numeric:tabular-nums}
+.pct-big{font-size:30px;font-weight:800;line-height:1;color:var(--red);white-space:nowrap;font-variant-numeric:tabular-nums;font-variation-settings:"wdth" 108}
+.pct-big.over{color:var(--gold)}
+
+.track{position:relative;height:20px;margin:17px 0 12px;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.fill{
+  position:absolute;top:0;bottom:0;left:0;width:0;border-radius:999px;
+  background:linear-gradient(90deg,#F5764F,var(--red));
+  transition:width .6s cubic-bezier(.2,.75,.3,1);
+}
+.fill.over{background:linear-gradient(90deg,var(--red) 25%,var(--gold))}
+.tick{position:absolute;top:50%;transform:translate(-50%,-50%);width:3px;height:3px;border-radius:50%;background:var(--ink);opacity:.18}
+.tick.done{background:#fff;opacity:.6}
+.tick.hundred{width:2px;height:100%;border-radius:0;opacity:.32;top:0;transform:translateX(-50%)}
+
+.won-line,.next-line{display:flex;align-items:flex-start;gap:9px;font-size:13px;margin:0}
+.won-line{margin-bottom:7px}
+.mini{
+  flex:0 0 auto;min-width:52px;text-align:center;padding:3px 8px;border-radius:7px;
+  font-size:11.5px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.35;
+}
+.mini.red{background:var(--red);color:#fff}
+.mini.gold{background:var(--gold);color:#fff}
+.mini.grey{background:var(--surface-2);color:var(--ink-soft);border:1px solid var(--line)}
+.mini.ghost{background:var(--red-wash);color:var(--red-deep);border:1px solid var(--red-tint)}
+.won-line .txt{font-weight:700;color:var(--ink)}
+.next-line .txt{color:var(--ink-soft)}
+.next-line .txt b{color:var(--ink);font-weight:800;font-variant-numeric:tabular-nums}
+
+/* ---------------- editor ---------------- */
+button{
+  font-family:inherit;font-size:13.5px;font-weight:700;cursor:pointer;border-radius:999px;
+  border:2px solid var(--red);background:var(--red);color:#fff;padding:9px 18px;
+  transition:transform .15s ease;
+}
+button:hover{transform:translateY(-1px)}
+button.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+button[disabled]{opacity:.55;cursor:not-allowed;transform:none}
+
+#editor{margin:0 0 30px;border:2px solid var(--red);border-radius:14px;background:var(--panel);padding:22px;box-shadow:var(--shadow)}
+#editor h2{font-size:19px;margin:0 0 6px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);
+  padding:9px 10px 9px 0;border-bottom:2px solid var(--line);font-weight:800}
+td{padding:6px 10px 6px 0;border-bottom:1px solid var(--line)}
+input{font-family:inherit;font-variant-numeric:tabular-nums;font-size:14px;font-weight:600;width:78px;
+  padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+input:focus-visible{outline:2px solid var(--red);outline-offset:1px}
+input[type=date]{width:158px}
+.scroller{overflow-x:auto;margin-top:12px}
+.msg{font-size:13px;margin-top:11px;color:var(--ink-soft)}
+.msg.err{color:var(--red-deep)}
+footer{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);color:var(--ink-soft);font-size:13px;max-width:72ch}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:640px){
+  .hero{padding:24px 22px 26px}
+  .controls{position:static;margin-top:18px}
+}
+</style>
+<style>
+.notice{border:1px solid var(--red-tint);background:var(--red-wash);color:var(--red-deep);
+  border-radius:12px;padding:13px 16px;margin:0 0 26px;font-size:13.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <div class="controls"><button id="refresh" type="button">Hent nye tal</button></div>
+    <div class="hero-top">
+      <svg class="logo" viewBox="0 0 567 567" role="img" aria-label="SF Ungdom">
+        <path class="plate" d="M62 0h505v505a62 62 0 0 1-62 62H62A62 62 0 0 1 0 505V62A62 62 0 0 1 62 0Z"/>
+        <g class="mark" fill="none" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" transform="translate(-20 0)">
+          <path d="M198 200c0-38-13-65-29-65s-29 27-29 65c0 80 58 96 58 176 0 38-13 65-29 65s-29-27-29-65"/>
+          <path d="M262 447V166a31 31 0 0 1 31-31h50M262 291h56"/>
+          <path d="M392 135v235a44 44 0 0 0 88 0V135"/>
+        </g>
+      </svg>
+      <p class="eyebrow">Hvervningsindsatsen 2026/27</p>
+    </div>
+    <h1>Hvor mange procent<br>af jeres mål er <em>I nået?</em></h1>
+    <p>Hver afdeling har meldt sit eget mål ind, og alle måles på det samme: hvor stor en del af jeres eget mål I har nået. Derfor har den mindste afdeling præcis lige så gode chancer som den største.</p>
+  </section>
+
+  <ul class="meta" id="meta"></ul>
+  <div id="notice"></div>
+  <section class="ladder" id="ladder"></section>
+  <section class="grid" id="grid"></section>
+
+  <footer>
+    Målene er afdelingernes egne ambitioner, meldt ind til forretningsudvalget. Stillingen opdateres
+    af FU efter hver rundringning og ved hvert landsledelsesmøde. Mangler der noget hos jer, så skriv til FU.
+  </footer>
+</div>
+
+<script>
+"use strict";
+
+/* ================================================================
+   INDSTILLINGER
+   ================================================================
+   Som standard læser siden filen data.csv, der ligger i samme mappe
+   som index.html. Vil du hellere styre tallene fra et Google Sheet,
+   så indsæt det udgivne CSV-link herunder. Se README.md.
+================================================================ */
+var SHEET_CSV_URL = "";      // valgfrit: udgivet CSV-link fra Google Sheets
+var DATA_URL = SHEET_CSV_URL || "data.csv";
+var OPDATER_HVERT_MINUT = 5; // hent nye tal automatisk hvert N. minut (0 = slå fra)
+
+/* Reservetal — vises kun hvis arket ikke kan hentes, så siden aldrig er tom. */
+var FALLBACK = [
+  {navn:"København",mal:39,nye:0},{navn:"Aarhus",mal:27,nye:0},
+  {navn:"Aalborg",mal:16,nye:0},{navn:"Odense",mal:16,nye:0},
+  {navn:"Hillerød",mal:11,nye:0},{navn:"Gladsaxe-Lyngby",mal:10,nye:0},
+  {navn:"Roskilde",mal:9,nye:0},{navn:"Esbjerg",mal:9,nye:0},
+  {navn:"Hvidovre",mal:9,nye:0},{navn:"Køge",mal:9,nye:0},
+  {navn:"Randers",mal:6,nye:0},{navn:"Holstebro",mal:8,nye:0},
+  {navn:"Sydsjælland",mal:8,nye:0},{navn:"Silkeborg",mal:8,nye:0},
+  {navn:"Sønderborg",mal:6,nye:0},{navn:"Viborg",mal:6,nye:0},
+  {navn:"Helsingør",mal:4,nye:0},{navn:"Skive",mal:4,nye:0},
+  {navn:"Horsens",mal:3,nye:0}
+];
+
+var LADDER = [
+  {pct:200, navn:"DL laver 3-retters menu til afdelingen"},
+  {pct:175, navn:"Rundvisning på Christiansborg"},
+  {pct:150, navn:"SoMe-takeover"},
+  {pct:125, navn:"Trådløs mikrofon til banger SoMe"},
+  {pct:100, navn:"1.000 kr. til en fest"},
+  {pct:75,  navn:"Pizza til et møde"},
+  {pct:50,  navn:"3 medlemmer gratis på forårstræf"},
+  {pct:25,  navn:"En ramme sodavand til næste møde"},
+  {pct:10,  navn:"Merch drop"}
+];
+var MAXPCT = 200;
+
+var afdelinger = FALLBACK.slice();
+var hentetKl = null;
+var fejl = "";
+
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]; }); }
+function pctOf(a){ return a.mal > 0 ? (a.nye / a.mal) * 100 : 0; }
+function unlocked(p){ for(var i=0;i<LADDER.length;i++){ if(p>=LADDER[i].pct) return LADDER[i]; } return null; }
+function nextTier(p){ for(var i=LADDER.length-1;i>=0;i--){ if(p<LADDER[i].pct) return LADDER[i]; } return null; }
+function klokken(d){ return d.toLocaleString("da-DK",{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"}); }
+
+/* Minimal CSV-parser der kan håndtere anførselstegn og linjeskift i felter. */
+function parseCSV(text){
+  var rows=[], row=[], val="", q=false, i=0;
+  text = text.replace(/^﻿/, "").replace(/\r\n/g,"\n").replace(/\r/g,"\n");
+  for(; i<text.length; i++){
+    var c = text[i];
+    if(q){
+      if(c === '"'){ if(text[i+1] === '"'){ val += '"'; i++; } else { q = false; } }
+      else val += c;
+    } else if(c === '"'){ q = true; }
+    else if(c === ","){ row.push(val); val = ""; }
+    else if(c === "\n"){ row.push(val); rows.push(row); row = []; val = ""; }
+    else val += c;
+  }
+  if(val !== "" || row.length){ row.push(val); rows.push(row); }
+  return rows.filter(function(r){ return r.some(function(x){ return String(x).trim() !== ""; }); });
+}
+
+function normaliser(s){
+  return String(s).toLowerCase().trim()
+    .replace(/å/g,"a").replace(/æ/g,"ae").replace(/ø/g,"o").replace(/[^a-z]/g,"");
+}
+
+function rowsTilData(rows){
+  if(!rows.length) throw new Error("Arket er tomt.");
+  var head = rows[0].map(normaliser);
+  var iNavn = head.indexOf("afdeling");
+  var iMal  = head.indexOf("mal");
+  var iNye  = head.indexOf("nye");
+  if(iNavn < 0) iNavn = 0;
+  if(iMal  < 0) iMal  = head.indexOf("maal") >= 0 ? head.indexOf("maal") : 1;
+  if(iNye  < 0) iNye  = head.indexOf("nyemedlemmer") >= 0 ? head.indexOf("nyemedlemmer") : 2;
+
+  var ud = [];
+  for(var r = 1; r < rows.length; r++){
+    var navn = (rows[r][iNavn] || "").trim();
+    if(!navn) continue;
+    var mal = parseInt(String(rows[r][iMal] || "").replace(/[^\d-]/g,""), 10);
+    var nye = parseInt(String(rows[r][iNye] || "").replace(/[^\d-]/g,""), 10);
+    ud.push({ navn: navn, mal: isNaN(mal) ? 0 : Math.max(0, mal), nye: isNaN(nye) ? 0 : Math.max(0, nye) });
+  }
+  if(!ud.length) throw new Error("Fandt ingen afdelinger i arket.");
+  return ud;
+}
+
+function renderMeta(){
+  var praemie = afdelinger.filter(function(a){ return pctOf(a) >= 10; }).length;
+  var imal = afdelinger.filter(function(a){ return pctOf(a) >= 100; }).length;
+  document.getElementById("meta").innerHTML =
+    '<li class="chip"><b>' + afdelinger.length + '</b> afdelinger med</li>' +
+    '<li class="chip hot"><b>' + praemie + '</b> har låst en præmie op</li>' +
+    '<li class="chip"><b>' + imal + '</b> har nået deres mål</li>' +
+    '<li class="chip">Opdateret <b>' + (hentetKl ? esc(klokken(hentetKl)) : "—") + '</b></li>' +
+    '<li class="chip">Optælling <b>24. marts 2027</b></li>';
+}
+
+function renderNotice(){
+  document.getElementById("notice").innerHTML = fejl ? '<p class="notice">' + esc(fejl) + '</p>' : "";
+}
+
+function renderLadder(){
+  document.getElementById("ladder").innerHTML =
+    '<div class="ladder-head"><h2>Præmietrappen</h2>' +
+    '<p>Trinene tælles i procent af <em>jeres eget</em> mål, ikke i antal medlemmer. ' +
+    '100 % betyder, at I ramte præcis det tal, I selv meldte ind — og der er stadig fire trin at gå derefter.</p></div>' +
+    '<ul class="steps">' + LADDER.map(function(t){
+      var band = t.pct >= 150 ? "top" : (t.pct === 100 ? "goal" : "");
+      var c1 = t.pct >= 150 ? "var(--red)" : "var(--red-tint)";
+      var c2 = t.pct >= 150 ? "var(--gold)" : "var(--red)";
+      var tag = t.pct === 100 ? '<span class="tag">Målet nået</span>'
+              : (t.pct === MAXPCT ? '<span class="tag gold">Årets største</span>' : "");
+      return '<li class="step ' + band + '" style="--c1:' + c1 + ';--c2:' + c2 + '">' +
+        '<span class="stepbar" style="--w:' + ((t.pct / MAXPCT) * 100) + '%"></span>' +
+        '<span class="pctchip">' + t.pct + '&thinsp;%</span>' +
+        '<span class="prize">' + esc(t.navn) + tag + '</span></li>';
+    }).join("") + '</ul>';
+}
+
+function renderGrid(){
+  var rows = afdelinger.slice().sort(function(a,b){
+    var d = pctOf(b) - pctOf(a);
+    if(d !== 0) return d;
+    if(b.nye !== a.nye) return b.nye - a.nye;
+    return a.navn.localeCompare(b.navn, "da");
+  });
+
+  document.getElementById("grid").innerHTML = rows.map(function(a,i){
+    var p = pctOf(a);
+    var w = Math.min(100, (p / MAXPCT) * 100);
+    var won = unlocked(p), nxt = nextTier(p);
+    var first = (i === 0 && p > 0);
+
+    var ticks = LADDER.map(function(t){
+      return '<div class="tick' + (p >= t.pct ? " done" : "") + (t.pct === 100 ? " hundred" : "") +
+             '" style="left:' + ((t.pct / MAXPCT) * 100) + '%"></div>';
+    }).join("");
+
+    var wonLine = won
+      ? '<p class="won-line"><span class="mini ' + (won.pct >= 150 ? "gold" : "red") + '">' + won.pct + '&thinsp;%</span>' +
+        '<span class="txt">Låst op: ' + esc(won.navn) + '</span></p>'
+      : '<p class="won-line"><span class="mini grey">0&thinsp;%</span>' +
+        '<span class="txt" style="font-weight:600;color:var(--ink-soft)">Ingen præmie låst op endnu</span></p>';
+
+    var nextLine;
+    if(nxt){
+      var behov = Math.max(1, Math.ceil(a.mal * nxt.pct / 100) - a.nye);
+      nextLine = '<p class="next-line"><span class="mini ghost">' + nxt.pct + '&thinsp;%</span>' +
+        '<span class="txt">Næste: ' + esc(nxt.navn) + ' — mangler <b>' + behov + '</b> ' +
+        (behov === 1 ? "nyt medlem" : "nye medlemmer") + '</span></p>';
+    } else {
+      nextLine = '<p class="next-line"><span class="mini gold">200&thinsp;%</span>' +
+        '<span class="txt">Hele trappen er gennemført. Respekt.</span></p>';
+    }
+
+    return '<article class="card' + (first ? " lead" : "") + '">' +
+      '<div class="card-head"><div class="who">' +
+        '<span class="rank' + (first ? " first" : "") + '">' + (i + 1) + '</span>' +
+        '<div><h3 class="afd">' + esc(a.navn) + '</h3>' +
+        '<p class="counts">' + a.nye + ' af ' + a.mal + ' nye medlemmer</p></div>' +
+      '</div><span class="pct-big' + (p >= 100 ? " over" : "") + '">' + Math.round(p) + '&thinsp;%</span></div>' +
+      '<div class="track" role="img" aria-label="' + Math.round(p) + ' procent af målet">' +
+        '<div class="fill' + (p >= 100 ? " over" : "") + '" style="width:' + w + '%"></div>' + ticks + '</div>' +
+      wonLine + nextLine +
+    '</article>';
+  }).join("");
+}
+
+function renderAll(){ renderMeta(); renderNotice(); renderLadder(); renderGrid(); }
+
+function hent(){
+  var btn = document.getElementById("refresh");
+  var url = DATA_URL + (DATA_URL.indexOf("?") >= 0 ? "&" : "?") + "_=" + Date.now();
+  btn.disabled = true;
+  btn.textContent = "Henter …";
+
+  return fetch(url, {cache:"no-store"})
+    .then(function(r){
+      if(!r.ok) throw new Error("Serveren svarede " + r.status);
+      return r.text();
+    })
+    .then(function(txt){
+      afdelinger = rowsTilData(parseCSV(txt));
+      hentetKl = new Date();
+      fejl = "";
+    })
+    .catch(function(e){
+      fejl = "Kunne ikke hente tallene fra " + DATA_URL + " (" + e.message + "). " +
+             (hentetKl ? "Viser det, der sidst blev hentet." : "Viser reservetallene fra index.html.");
+    })
+    .then(function(){
+      btn.disabled = false;
+      btn.textContent = "Hent nye tal";
+      renderAll();
+    });
+}
+
+document.getElementById("refresh").addEventListener("click", hent);
+renderAll();
+hent();
+if(OPDATER_HVERT_MINUT > 0){ setInterval(hent, OPDATER_HVERT_MINUT * 60000); }
+</script>
+</body>
+</html>
