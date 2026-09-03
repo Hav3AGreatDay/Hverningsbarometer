@@ -94,13 +94,15 @@ h1,h2,h3{
 }
 
 /* ---------------- cards ---------------- */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:16px}
 .card{
   background:var(--surface);border:1px solid var(--line);border-radius:14px;
   padding:19px 20px 20px;box-shadow:var(--shadow);
   transition:transform .18s ease, box-shadow .18s ease;
 }
-.card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lift)}
+@media (hover:hover){
+  .card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lift)}
+}
 .card.lead{border:2px solid var(--gold);background:linear-gradient(180deg,var(--gold-wash),var(--surface) 92px);padding:18px 19px 19px}
 
 .card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
@@ -145,10 +147,12 @@ h1,h2,h3{
 /* ---------------- editor ---------------- */
 button{
   font-family:inherit;font-size:13.5px;font-weight:700;cursor:pointer;border-radius:999px;
-  border:2px solid var(--red);background:var(--red);color:#fff;padding:9px 18px;
+  border:2px solid var(--red);background:var(--red);color:#fff;padding:11px 18px;min-height:44px;
   transition:transform .15s ease;
 }
-button:hover{transform:translateY(-1px)}
+@media (hover:hover){
+  button:hover{transform:translateY(-1px)}
+}
 button.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
 button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 button[disabled]{opacity:.55;cursor:not-allowed;transform:none}
@@ -169,8 +173,55 @@ input[type=date]{width:158px}
 footer{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);color:var(--ink-soft);font-size:13px;max-width:72ch}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 @media (max-width:640px){
-  .hero{padding:24px 22px 26px}
-  .controls{position:static;margin-top:18px}
+  body{font-size:15px;line-height:1.5}
+  .wrap{padding:18px 14px 56px}
+  .hero{display:flex;flex-direction:column;padding:18px 16px 20px;border-radius:14px;margin-bottom:14px}
+  .hero-top{order:2;margin-top:12px;margin-bottom:0;gap:10px}
+  .logo{width:42px;height:42px}
+  .hero h1{order:0;font-size:clamp(27px,8.2vw,36px);line-height:1.02}
+  .hero p{order:1;margin-top:9px;font-size:14px;max-width:40ch}
+  .eyebrow{font-size:10.5px;letter-spacing:.14em}
+  .meta{gap:7px;margin-bottom:18px}
+  .meta .chip{padding:7px 11px;font-size:12.5px}
+  .meta .chip:nth-child(n+4){display:none}
+  .ladder{margin-bottom:26px}
+  .ladder-head h2{font-size:18px}
+  .ladder-head p{font-size:13px;line-height:1.45}
+  .step{padding:10px 12px;gap:8px;box-shadow:0 1px 2px rgba(60,45,25,.06)}
+  .step.goal,.step.top{padding:9px 11px}
+  .pctchip{min-width:58px;padding:6px 8px;font-size:13px}
+  .prize{font-size:14px;line-height:1.3}
+  .grid{grid-template-columns:1fr;gap:12px}
+  .card{padding:14px 14px 15px;box-shadow:0 1px 2px rgba(60,45,25,.06)}
+  .card.lead{padding:13px 13px 14px}
+  .card-head{gap:8px}
+  .who{gap:9px}
+  .rank{width:26px;height:26px}
+  .afd{font-size:18px}
+  .counts{font-size:11.5px;margin-top:2px;opacity:.85}
+  .pct-big{font-size:27px}
+  .track{height:18px;margin:12px 0 10px}
+  .won-line,.next-line{font-size:12.5px;gap:7px}
+  .mini{min-width:48px;font-size:11px}
+  .controls{position:static;margin-top:12px}
+  table{font-size:13px}
+  th,td{white-space:nowrap;padding-right:8px}
+  input{width:72px;min-height:42px}
+  input[type=date]{width:142px}
+  .scroller{margin-top:10px}
+  footer{margin-top:30px;padding-top:16px;font-size:12.5px}
+}
+@media (max-width:390px){
+  .wrap{padding:14px 10px 44px}
+  .hero h1{font-size:clamp(24px,8.8vw,31px)}
+  .hero p{font-size:13.5px}
+  .meta .chip{font-size:12px;padding:6px 10px}
+  .step{padding:9px 10px}
+  .pct-big{font-size:24px}
+  .afd{font-size:17px}
+  th{font-size:10px}
+  input{width:68px}
+  input[type=date]{width:130px}
 }
 </style>
 <style>
